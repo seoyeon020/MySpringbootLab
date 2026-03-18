@@ -1,4 +1,4 @@
-package com.rookies5.MySpringbootLab.advice;
+package com.rookies5.MySpringbootLab.exception.advice;
 
 import com.rookies5.MySpringbootLab.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
