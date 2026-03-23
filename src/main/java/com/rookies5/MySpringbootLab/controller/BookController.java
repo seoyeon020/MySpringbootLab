@@ -20,45 +20,60 @@ public class BookController {
 
     //새 도서 등록
     @PostMapping
-    public ResponseEntity<BookDTO.BookResponse> createBook(@Valid @RequestBody BookDTO.BookCreateRequest request) {
-        BookDTO.BookResponse response = bookService.createBook(request);
+    public ResponseEntity<BookDTO.Response> createBook(@Valid @RequestBody BookDTO.Request request) {
+        BookDTO.Response response = bookService.createBook(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     //모든 도서 목록 조회
     @GetMapping
-    public ResponseEntity<List<BookDTO.BookResponse>> getAllBooks() {
-        List<BookDTO.BookResponse> response = bookService.getAllBooks();
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<BookDTO.Response>> getAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
     }
 
     //ID로 특정 도서 조회
     @GetMapping("/{id}")
-    public ResponseEntity<BookDTO.BookResponse> getBookById(@PathVariable Long id) {
-        BookDTO.BookResponse response = bookService.getBookById(id);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<BookDTO.Response> getBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getBookById(id));
     }
 
     //ISBN으로 도서 조회
     @GetMapping("/isbn/{isbn}")
-    public ResponseEntity<BookDTO.BookResponse> getBookByIsbn(@PathVariable String isbn) {
-        BookDTO.BookResponse response = bookService.getBookByIsbn(isbn);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<BookDTO.Response> getBookByIsbn(@PathVariable String isbn) {
+        return ResponseEntity.ok(bookService.getBookByIsbn(isbn));
     }
 
     //저자로 도서 조회
-    @GetMapping("/author/{author}")
-    public ResponseEntity<List<BookDTO.BookResponse>> getBooksByAuthor(@PathVariable String author) {
-        List<BookDTO.BookResponse> response = bookService.getBooksByAuthor(author);
-        return ResponseEntity.ok(response);
+    @GetMapping("/search/author")
+    public ResponseEntity<List<BookDTO.Response>> getBooksByAuthor(@RequestParam String author) {
+        return ResponseEntity.ok(bookService.getBooksByAuthor(author));
     }
 
-    //도서 수정
+    //제목으로 도서 조회
+    @GetMapping("/search/title")
+    public ResponseEntity<List<BookDTO.Response>> getBooksByTitle(@RequestParam String title) {
+        return ResponseEntity.ok(bookService.getBooksByTitle(title));
+    }
+
+    //도서 전체 수정
     @PutMapping("/{id}")
-    public ResponseEntity<BookDTO.BookResponse> updateBook(@PathVariable Long id,
-                                                           @Valid @RequestBody BookDTO.BookUpdateRequest request) {
-        BookDTO.BookResponse response = bookService.updateBook(id, request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<BookDTO.Response> updateBook(@PathVariable Long id,
+                                                           @Valid @RequestBody BookDTO.Request request) {
+        return ResponseEntity.ok(bookService.updateBook(id, request));
+    }
+
+    //도서 부분 수정
+    @PatchMapping("/{id}")
+    public ResponseEntity<BookDTO.Response> patchBook(@PathVariable Long id,
+                                                      @RequestBody BookDTO.PatchRequest request) {
+        return ResponseEntity.ok(bookService.patchBook(id, request));
+    }
+
+    //도서 상세 정보만 부분 수정
+    @PatchMapping("/{id}/detail")
+    public ResponseEntity<BookDTO.Response> patchBookDetail(@PathVariable Long id,
+                                                            @RequestBody BookDTO.BookDetailPatchRequest request) {
+        return ResponseEntity.ok(bookService.patchBookDetail(id, request));
     }
 
     //도서 삭제

@@ -1,8 +1,7 @@
 package com.rookies5.MySpringbootLab.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
@@ -12,6 +11,9 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @DynamicUpdate
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Book {
 
     @Id
@@ -29,6 +31,16 @@ public class Book {
 
     private Integer price;
     private LocalDate publishDate;
+
+    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private BookDetail bookDetail;
+
+    public void setBookDetail(BookDetail bookDetail) {
+        this.bookDetail = bookDetail;
+        if (bookDetail != null) {
+            bookDetail.setBook(this);
+        }
+    }
 
 
 }
